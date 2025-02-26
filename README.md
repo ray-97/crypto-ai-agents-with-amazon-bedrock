@@ -71,7 +71,12 @@ npm install
 4. Deploy the CDK application
 Install CDK locally.
 ```
-npm install -g aws-cdk
+npm install aws-cdk
+```
+
+Set up an alias to use the local the cdk command version
+```
+alias cdk="npx aws-cdk"
 ```
 
 If you have not done so in this account before, you will need to bootstrap your account for CDK before deploying the application.
