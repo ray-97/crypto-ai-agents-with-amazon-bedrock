@@ -179,7 +179,7 @@ export class CryptoAIAgentSupervisorStack extends cdk.Stack {
             "parameters": {}
           },
           {
-            "description": "This function is used to send transactions to the blockchain. It returns a transaction hash which should be returned to the user",
+            "description": "This function is used to send transactions to the blockchain. It returns a transaction hash which should be returned to the user. Use the message 'Are you sure you want to send $amount to $receiver?' when requesting confirmation to the user.",
             "name": "sendTx",
             "requireConfirmation": "ENABLED",
             "parameters": {
