@@ -42,13 +42,13 @@ The following diagram illustrates the solution architecture and how the various 
 
 The solution is an [AWS CDK](https://aws.amazon.com/cdk/) application. Follow the steps below to deploy it. You will need to have [Docker](https://www.docker.com/) running.
 
-1. Clone this repository and change directory into it
+**1. Clone this repository and change directory into it**
 ```
 git clone git@github.com:aws-samples/crypto-ai-agents-with-amazon-bedrock.git
 cd crypto-ai-agents-with-amazon-bedrock
 ```
 
-2. Prepare your environment
+**2. Prepare your environment**
 
 Copy `.env.sample` to a new `.env` file
 ```
@@ -59,16 +59,18 @@ Update `.env` with the appropriate values, including the AWS `ACCOUNT_ID`.
 
 The solution defaults to using Polygon mainnet and accesses it via Amazon Managed Blockchain. If you want to use a different EVM-compatible network, specify the RPC endpoint in the `BLOCKCHAIN_RPC_URL` variable in the `.env`.
 
-(Optional) If you want your agent to query current cryptocurrency prices, you will need to obtain a [CoinGecko API key](https://www.coingecko.com/en/developers/dashboard)
+> [!NOTE]
+> (Optional) If you want your agent to query current cryptocurrency prices, you will need to obtain a [CoinGecko API key](https://www.coingecko.com/en/developers/dashboard)
 
-(Optional) The agent understands Ethereum Name Service (ENS) domain names, for example, translating `vitalik.eth` into the corresponding address. If you use the default Polygon network, this will work without any changes required. However, if you are using a different network, and want to have the agent support domain name resolution. you will need to set the Unstoppable Domains contract address in the `UNSTOPPABLE_DOMAINS_ADDRESS` variable. 
+> [!NOTE]
+> (Optional) The agent understands Ethereum Name Service (ENS) domain names, for example, translating `vitalik.eth` into the corresponding address. If you use the default Polygon network, this will work without any changes required. However, if you are using a different network, and want to have the agent support domain name resolution. you will need to set the Unstoppable Domains contract address in the `UNSTOPPABLE_DOMAINS_ADDRESS` variable. 
 
-3. Install dependencies
+**3. Install dependencies**
 ```
 npm install
 ```
 
-4. Deploy the CDK application
+**4. Deploy the CDK application**
 Install CDK locally.
 ```
 npm install aws-cdk
@@ -91,7 +93,7 @@ cdk deploy --all --require-approval never
 
 The deployment time is about 10 minutes.
 
-5. Enable Bedrock Model Access
+**5. Enable Bedrock Model Access**
 
 The model uses the `Amazon Nova Pro v1` model for inference and `Amazon Titan` model for creating vector embeddings for the Knowledge Base. You need to enable access to these models before they can be used.
 
@@ -106,9 +108,9 @@ The model uses the `Amazon Nova Pro v1` model for inference and `Amazon Titan` m
 
 The solution deploys two agents; a Supervisor Agent (Crypto AI Agent) which coordinates the user requests across various tasks, and a Collaborator Agent (Blockchain Data Agent) which fulfills a specific need of accessing historic blockchain data. We want our users to only have to send their queries to the Supervisor Agent, instead of needing to switch between agents. Therefore, any time a user wants to query historic blockchain data, we need our Supervisor Agent to delegate this request to the Collaborator Agent. The steps below guide you on how to do this.
 
-1. From supervisor agent, enable multi-agent collaboration
-2. Under Collaboration configuration, select `Supervisor`
-3. Select the blockchain data agent as the collaborator, and select a version
+1. From supervisor agent, enable multi-agent collaboration.
+2. Under Collaboration configuration, select `Supervisor`.
+3. Select the blockchain data agent as the collaborator, and select the agent alias.
 4. Set the collaborator name to `blockchain-data-collaborator-agent`
 5. Set the Collaborator instruction to `The blockchain-data-collaborator-agent can query historic bitcoin and ethereum data, providing data such as number of transactions within a period of time, details of a block, or how many times a token was a transferred within a period of time.`
 6. Click 'Save and exit'. Click `Prepare` to prepare a new version of the agent.
@@ -142,6 +144,14 @@ Here are some prompts you can try out:
 
 #### Python Dependencies Error
 If you encounter an error during deployment related to Python dependencies bundling, ensure Docker is running on your machine
+
+## Cleanup resources
+Don't forget to clean up all the AWS resources you created. It is a best practice to delete resources you are no longer using to avoid unwanted charges.
+
+To delete the resources created:
+```
+cdk destroy --all --force
+```
 
 ## Security
 
